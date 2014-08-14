@@ -55,7 +55,9 @@ package org.lala.comments
             /** 因为本类管理顶部字幕,所以监听TOP消息 **/
             this.mode_list.push(CommentDataEvent.TOP);
         }
-        /** 设置空间管理者 **/
+        /**
+        * 设置空间管理者
+        **/
         protected function setSpaceManager():void
         {
             this.space_manager = new CommentSpaceManager();
