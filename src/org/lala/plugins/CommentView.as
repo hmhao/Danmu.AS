@@ -1,21 +1,9 @@
 package org.lala.plugins {
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	import flash.display.GradientType;
-	import flash.display.Graphics;
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.net.URLRequest;
-	import flash.net.navigateToURL;
-	import flash.system.System;
-	import flash.text.TextField;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuItem;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import org.lala.comments.*;
 	import org.lala.net.*;
@@ -47,6 +35,8 @@ package org.lala.plugins {
 		private var _version:String;
 		/** 简化的视频的播放器态,播放或静止 **/
 		private var _isPlaying:Boolean = false;
+		
+		private var _timer:Timer;
 		
 		public function CommentView() {
 			if (instance != null) {
@@ -81,30 +71,11 @@ package org.lala.plugins {
 			
 			/** 设置播放状态的初值 **/
 			_isPlaying = true;
+			
+			_timer = new Timer(1000);
+			_timer.addEventListener(TimerEvent.TIMER, timeHandler);
+			_timer.start();
 		}
-		
-		/** 状态改变事件监听器,监听暂停或者播放 **/
-		/*private function stateHandler(event:PlayerStateEvent):void {
-			var i:int;
-			var c:DisplayObject;
-			if ((event.newstate == 'PLAYING' && event.oldstate != 'BUFFERING') || (event.newstate == 'BUFFERING' && event.oldstate != 'PLAYING')) {
-				for (i = 0; i < _clip.numChildren; i++) {
-					c = _clip.getChildAt(i);
-					if (c is IComment) {
-						IComment(c).resume();
-					}
-				}
-				_isPlaying = true;
-			} else if ((event.oldstate == 'PLAYING' && event.newstate != 'BUFFERING') || (event.oldstate == 'BUFFERING' && event.newstate != 'PLAYING')) {
-				for (i = 0; i < _clip.numChildren; i++) {
-					c = _clip.getChildAt(i);
-					if (c is IComment) {
-						IComment(c).pause();
-					}
-				}
-				_isPlaying = false;
-			}
-		}*/
 		
 		/** 接口方法:播放器调整大小时被调用 **/
 		public function resize(width:Number, height:Number):void {
@@ -141,15 +112,15 @@ package org.lala.plugins {
 		/**
 		 * 播放时间事件
 		 **/
-		/*private function timeHandler(event:MediaEvent):void {
+		private function timeHandler(event:TimerEvent):void {
 			if (cmtConfig.visible == false) {
 				return;
 			}
-			_stime = event.position;
+			_stime = _timer.currentCount;
 			for each (var manager:CommentManager in managers) {
-				manager.time(event.position);
+				manager.time(_stime);
 			}
-		}*/
+		}
 		
 		/**
 		 * 当前时间

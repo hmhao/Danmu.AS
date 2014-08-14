@@ -37,6 +37,8 @@
     </source-path>
     <library-path append="true">
       <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\as3corelib.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\BetweenAS3-Alpha-fp10.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\fukidashi.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

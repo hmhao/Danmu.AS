@@ -31,6 +31,7 @@ package {
 			
 			this.addChild(commentView);
 			commentView.initPlugin();
+			commentView.resize(stage.stageWidth, stage.stageHeight);
 			playerTool.loadCmtFile("2093520.xml");
 		}
 	}
