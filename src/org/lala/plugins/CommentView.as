@@ -6,6 +6,7 @@ package org.lala.plugins {
 	import flash.utils.Timer;
 	
 	import org.lala.comments.*;
+	import org.lala.filter.*;
 	import org.lala.net.*;
 	import org.lala.utils.*;
 	

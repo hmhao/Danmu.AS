@@ -4,8 +4,6 @@ package org.lala.net
     import flash.net.URLLoader;
     import flash.net.URLRequest;
     
-    import mx.collections.ArrayCollection;
-    
     import org.lala.event.CommentDataEvent;
     import org.lala.event.EventBus;
     import org.lala.event.MukioEvent;
@@ -21,15 +19,11 @@ package org.lala.net
         /** 用于网络连接的loader **/
         private var xmlLoader:URLLoader;
         /** 弹幕库 **/
-        private var _repo:ArrayCollection;
+        private var _repo:Array;
         
         public function CommentProvider()
         {
-            _repo = new ArrayCollection();
-            this.xmlLoader = new URLLoader();
-            xmlLoader.addEventListener(Event.COMPLETE,completeHandler);
-            xmlLoader.addEventListener(IOErrorEvent.IO_ERROR,errorHandler);
-            xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,errorHandler);
+            _repo = [];
             
             EventBus.getInstance().addEventListener(MukioEvent.DISPLAY,displayeHandler);
             EventBus.getInstance().addEventListener("displayRtmp",displayeHandler);
@@ -42,6 +36,10 @@ package org.lala.net
         /** 加载成功 **/
         private function completeHandler(event:Event):void
         {
+			this.xmlLoader.removeEventListener(Event.COMPLETE, completeHandler);
+            this.xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+            this.xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+            this.clear();
             try
             {
                 var xml:XML = XML(xmlLoader.data);
@@ -53,6 +51,10 @@ package org.lala.net
         /** 错误处理 **/
         private function errorHandler(event:Event):void
         {
+			this.xmlLoader.removeEventListener(Event.COMPLETE, completeHandler);
+            this.xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+            this.xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+            this.xmlLoader = null;
             msg(event.toString());
         }
         /** 错误输出 **/
@@ -68,7 +70,7 @@ package org.lala.net
         {
             /** 加载前清理弹幕 **/
             this.dispatchEvent(new CommentDataEvent(CommentDataEvent.CLEAR));
-            this._repo.removeAll();
+            this._repo.splice(0, this._repo.length);
             if(type == "")
             {
                 type = CommentFormat.OLDACFUN;
@@ -80,8 +82,19 @@ package org.lala.net
             else
             {
                 var request:URLRequest = new URLRequest(url);
+				if(this.xmlLoader == null){
+					xmlLoader = new URLLoader();
+					xmlLoader.addEventListener(Event.COMPLETE,completeHandler);
+					xmlLoader.addEventListener(IOErrorEvent.IO_ERROR,errorHandler);
+					xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+				}
                 xmlLoader.load(request);
             }
+        }
+		private function clear() : void
+        {
+            this._repo.splice(0, this._repo.length);
+            this.dispatchEvent(new CommentDataEvent(CommentDataEvent.CLEAR));
         }
         /**
         * 解析xml
@@ -118,9 +131,9 @@ package org.lala.net
             {
                 return;
             }
-            this._repo.addItem(data);
+            this._repo.push(data);
         }
-        public function get commentResource():ArrayCollection
+        public function get commentResource():Array
         {
             return _repo;
         }

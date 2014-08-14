@@ -5,7 +5,8 @@ package org.lala.comments
     
     import org.lala.event.*;
     import org.lala.net.*;
-    import org.lala.plugins.CommentView;
+	import org.lala.filter.*;
+    import org.lala.plugins.*;
     import org.lala.utils.*;
 
     /**
