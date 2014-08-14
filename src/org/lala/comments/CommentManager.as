@@ -18,29 +18,17 @@ package org.lala.comments
      */
     public class CommentManager
     {
-        /**
-         * 时间轴,为弹幕数据信息数组,按时间顺序插入
-         */
+        /** 时间轴,为弹幕数据信息数组,按时间顺序插入 **/
         protected var timeLine:Array = [];
-        /**
-         * 时间轴当前位置索引
-         */
+        /** 时间轴当前位置索引 **/
         protected var pointer:int = 0;
-        /**
-         * 保存上一次time调手时的时间位置
-         */
+        /** 保存上一次time调手时的时间位置 **/
         protected var oldPosition:Number = 0;
-        /**
-         * 弹幕舞台
-         */
+        /** 弹幕舞台 **/
         protected var clip:Sprite;
-        /**
-        * 弹幕来源
-        **/
+        /** 弹幕来源 **/
         protected var _provider:CommentProvider = null;
-        /**
-        * 弹幕过滤器
-        **/
+        /** 弹幕过滤器 **/
         protected var _filter:CommentFilter = null;
         /** 弹幕空间管理者 **/
         protected var space_manager:CommentSpaceManager;
@@ -67,9 +55,7 @@ package org.lala.comments
             /** 因为本类管理顶部字幕,所以监听TOP消息 **/
             this.mode_list.push(CommentDataEvent.TOP);
         }
-        /**
-        * 设置空间管理者
-        **/
+        /** 设置空间管理者 **/
         protected function setSpaceManager():void
         {
             this.space_manager = new CommentSpaceManager();
