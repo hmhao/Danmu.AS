@@ -6,12 +6,12 @@
     <movie input="" />
     <movie path="bin\danmu.swf" />
     <movie fps="30" />
-    <movie width="800" />
-    <movie height="600" />
+    <movie width="970" />
+    <movie height="540" />
     <movie version="10" />
-    <movie minorVersion="1" />
+    <movie minorVersion="2" />
     <movie platform="Flash Player" />
-    <movie background="#666666" />
+    <movie background="#333333" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -54,6 +54,7 @@
     <element path="lib\as3corelib.swc" />
     <element path="lib\BetweenAS3-Alpha-fp10.swc" />
     <element path="lib\fukidashi.swc" />
+    <element path="lib\PluginsUI.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

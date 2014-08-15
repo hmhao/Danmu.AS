@@ -259,7 +259,8 @@ package org.lala.comments
          */
         public function resize(width:Number, height:Number):void
         {
-            this.space_manager.setRectangle(config.width,config.height);
+            //this.space_manager.setRectangle(config.width,config.height);
+            this.space_manager.setRectangle(width,height);
         }
         /**
          * 驱动Manager的时间轴

@@ -1,4 +1,5 @@
 package {
+	import flash.events.MouseEvent;
 	import org.lala.net.CommentServer;
 	import org.lala.plugins.CommentView;
 	import org.lala.utils.CommentConfig;
@@ -9,6 +10,8 @@ package {
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.display.StageScaleMode;
+	import flash.display.StageAlign;
 	
 	public class MukioPlayerPlus extends Sprite {
 		/** 播放器小助手 **/
@@ -24,7 +27,9 @@ package {
 			this.addEventListener(Event.ADDED_TO_STAGE, playerReadyHandler);
 		}
 		
-		private function playerReadyHandler(event:Event):void {
+		private function playerReadyHandler(evt:Event):void {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
 			playerTool = new PlayerTool();
 			//conf = new CommentXMLConfig(root);
 			server = new CommentServer();
@@ -33,6 +38,17 @@ package {
 			commentView.initPlugin();
 			commentView.resize(stage.stageWidth, stage.stageHeight);
 			playerTool.loadCmtFile("2093520.xml");
+			
+			stage.addEventListener(Event.RESIZE, onResize);
+			stage.addEventListener(MouseEvent.CLICK, onClick);
+		}
+		
+		private function onResize(evt:Event):void {
+			commentView.resize(stage.stageWidth, stage.stageHeight);
+		}
+		
+		private function onClick(evt:MouseEvent):void {
+			CommentView.getInstance().isPlaying = !CommentView.getInstance().isPlaying;
 		}
 	}
 }

@@ -16,9 +16,7 @@ package org.lala.comments
      */
     public class Comment extends TextField implements IComment
     {
-        /**
-         * 完成地调用的函数,无参数
-         */
+        /** 完成地调用的函数,无参数 **/
         protected var _complete:Function;
         /** 配置数据 **/
         protected var item:Object;

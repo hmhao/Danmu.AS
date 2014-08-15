@@ -30,12 +30,12 @@ package org.lala.utils
 		/** 滤镜效果 **/
         public var filtersArr:Array;
         /** 速度因子:0.1-2 **/
-        public var speede:Number = 1;
+        public var speede:Number = 1.2;
         /** 字号缩放因子:0.1-2 **/
         public var sizee:Number = 1;
         
-        private var _width:int = 540;
-        private var _height:int = 432;
+        private var _width:int = 970;
+        private var _height:int = 540;
         
         /** 宽度 **/
         public function get width():int
