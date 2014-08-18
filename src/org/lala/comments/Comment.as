@@ -129,6 +129,10 @@ package org.lala.comments
         {
             this._complete = foo;
         }
+		
+		public function stop():void {
+			this._tm.stop();
+			this.completeHandler(null);
+		}
     }
-    
 }

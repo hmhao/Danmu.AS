@@ -390,6 +390,11 @@ package org.lala.comments
 			return 0;
 			
 		}
+		
+		public function stop():void {
+			this.tw.stop();
+			this.completeHandler(null);
+		}
 	}
 
 }

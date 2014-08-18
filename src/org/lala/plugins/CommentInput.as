@@ -17,9 +17,9 @@ package org.lala.plugins {
 	 * @author hmh
 	 */
 	public class CommentInput extends Sprite {
-		public var sayTxt:TextField;
-		public var restrictTxt:TextField;
-		public var sendBtn:SimpleButton;
+		private var sayTxt:TextField;
+		private var restrictTxt:TextField;
+		private var sendBtn:SimpleButton;
 		
 		private var _defaultText:String = "我也要吐个槽~ 最多可输入40字";
 		private var _maxChars:int = 40;
@@ -113,11 +113,11 @@ package org.lala.plugins {
 		
 		private function onSendClick(evt:MouseEvent):void {
 			if (_hadMove) return;
-			trace("send");
+			//trace("send");
 			if (sayTxt.text != "") {
 				var data:Object = { };
 				data.type = CommentDataType.NORMAL;
-				data.text = "【我】：" + sayTxt.text;
+				data.text = "【我】：" + sayTxt.text + " ";
 				data.color = _config.color;
 				data.size = 25;
 				data.mode = 'toLeft';

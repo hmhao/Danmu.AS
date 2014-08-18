@@ -91,5 +91,10 @@ package org.lala.comments
         {
             this._complete();
         }
+		
+		public function stop():void {
+			this._tw.stop();
+			this.completeHandler(null);
+		}
     }
 }

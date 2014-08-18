@@ -6,6 +6,7 @@ package org.lala.plugins {
 	import flash.utils.Timer;
 	
 	import org.lala.comments.*;
+	import org.lala.event.*
 	import org.lala.filter.*;
 	import org.lala.net.*;
 	import org.lala.utils.*;
@@ -129,6 +130,26 @@ package org.lala.plugins {
 			}
 		}
 		
+		private function clearCommentDataHandler(event:CommentDataEvent) : void {
+            this.clearComments();
+        }
+		
+		private function clearComments() : void {
+			var commentArr:Vector.<IComment> = new Vector.<IComment>;
+			var comment:IComment;
+			while (this._clip.numChildren > 0) {
+				comment = this._clip.getChildAt(0) as IComment;
+				comment && comment.stop();
+			}
+        }
+		
+		public function showComments(value:Boolean) : void {
+			this.cmtConfig.visible = value;
+			this._input.visible = value;
+            this.clearComments();
+        }
+
+		
 		/**
 		 * 当前时间
 		 **/
@@ -141,6 +162,7 @@ package org.lala.plugins {
 		 **/
 		private function init():void {
 			this._provider = new CommentProvider();
+			this._provider.addEventListener(CommentDataEvent.CLEAR, this.clearCommentDataHandler);
 			this._filter = CommentFilter.getInstance();
 			addManagers();
 		}

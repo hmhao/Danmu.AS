@@ -213,7 +213,6 @@ package org.lala.comments
                 self.complete(data);
                 self.removeFromSpace(cmt);
                 clip.removeChild(DisplayObject(cmt));
-//                cmt = null;
             };
             this.add2Space(cmt);
             /** 添加到舞台 **/

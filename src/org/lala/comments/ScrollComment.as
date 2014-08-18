@@ -54,6 +54,11 @@ package org.lala.comments
         {
             _tw.stop();
         }
-
+		
+		override public function stop():void 
+		{
+			this._tw.stop();
+			this.completeHandler(null);
+		}
     }
 }

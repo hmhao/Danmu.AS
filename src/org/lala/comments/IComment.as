@@ -8,6 +8,7 @@ package org.lala.comments
       function start():void;
       function pause():void;
       function resume():void;
+	  function stop():void;
       function set complete(foo:Function):void;
     }
 }

@@ -32,18 +32,18 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\src</path-element>
+      <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\src</path-element>
       <path-element>E:\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
-      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\as3corelib.swc</path-element>
-      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\BetweenAS3-Alpha-fp10.swc</path-element>
-      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\fukidashi.swc</path-element>
-      <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\lib\PluginsUI.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\lib\as3corelib.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\lib\BetweenAS3-Alpha-fp10.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\lib\fukidashi.swc</path-element>
+      <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\lib\PluginsUI.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>C:\Users\admin\Desktop\竞品播放器\danmu\src\MukioPlayerPlus.as</path-element>
+    <path-element>C:\Users\admin\Desktop\CompetingPlayer\danmu\src\MukioPlayerPlus.as</path-element>
   </file-specs>
   <default-background-color>#333333</default-background-color>
   <default-frame-rate>30</default-frame-rate>

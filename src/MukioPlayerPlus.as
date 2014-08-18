@@ -2,6 +2,7 @@ package {
 	import flash.events.MouseEvent;
 	import org.lala.net.CommentServer;
 	import org.lala.plugins.CommentView;
+	import org.lala.plugins.CommentButton;
 	import org.lala.utils.CommentConfig;
 	import org.lala.utils.CommentDataParser;
 	import org.lala.utils.CommentXMLConfig;
@@ -18,6 +19,8 @@ package {
 		private var playerTool:PlayerTool;
 		/** 弹幕播放器插件类的引用 **/
 		private var commentView:CommentView = CommentView.getInstance();
+		/** 弹幕开关按钮 **/
+		private var commentButton:CommentButton;
 		/** 服务器端配置 **/
 		private var conf:CommentXMLConfig;
 		/** 弹幕报务器接口 **/
@@ -35,20 +38,26 @@ package {
 			server = new CommentServer();
 			
 			this.addChild(commentView);
+			commentButton = new CommentButton();
+			commentButton.x = stage.stageWidth - commentButton.width;
+			commentButton.y = stage.stageHeight - commentButton.height;
+			this.addChild(commentButton);
 			commentView.initPlugin();
 			commentView.resize(stage.stageWidth, stage.stageHeight);
+			commentView.showComments(commentButton.isOn);
 			playerTool.loadCmtFile("2093520.xml");
 			
+			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
-			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		private function onResize(evt:Event):void {
 			commentView.resize(stage.stageWidth, stage.stageHeight);
 		}
 		
-		private function onClick(evt:MouseEvent):void {
-			CommentView.getInstance().isPlaying = !CommentView.getInstance().isPlaying;
+		private function onCommentButtonClick(evt:MouseEvent):void {
+			commentButton.isOn = !commentButton.isOn;
+			commentView.showComments(commentButton.isOn);
 		}
 	}
 }
