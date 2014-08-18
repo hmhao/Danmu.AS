@@ -22,7 +22,9 @@ package org.lala.utils
 		/** 是否显示弹幕,没有存储到本地 **/
         public var visible:Boolean=true;
         /** 粗体 **/
-        public var bold:Boolean=true;
+        public var bold:Boolean = true;
+		/** 颜色 **/
+        public var color:uint=0xFFFFFF;
         /** 透明度:0-1 **/
         public var alpha:Number=1;
         /** 滤镜:0-2 **/
@@ -59,6 +61,15 @@ package org.lala.utils
 				{label:"浅影",data:[new DropShadowFilter(2, 45, 0, 0.6)]},
 				{label:"深影",data:[new GlowFilter(0, 0.85, 4, 4, 3, 1, false, false)]}
 			];
+			
+			/*filtersArr = [
+				{label: "重墨", black: [new GlowFilter(0, 0.85, 4, 4, 3, 1, false, false)], 
+								white: [new GlowFilter(16777215, 0.9, 3, 3, 4, 1, false, false)] }, 
+				{label: "描边", black: [new GlowFilter(0, 0.7, 3, 3, 2, 1, false, false)], 
+								white: [new GlowFilter(16777215, 0.7, 3, 3, 2, 1, false, false)] }, 
+				{label: "45°投影", black: [new DropShadowFilter(1, 45, 0, 0.8, 2, 2, 2)], 
+								white: [new DropShadowFilter(1, 45, 16777215, 0.8, 2, 2, 2)]}];
+			*/
 			reset();
             load();
         }

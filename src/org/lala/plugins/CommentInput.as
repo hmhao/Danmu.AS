@@ -1,5 +1,9 @@
 package org.lala.plugins {
 	import org.lala.plugins.CommentInputUI;
+	import org.lala.comments.CommentDataType;
+	import org.lala.utils.CommentConfig;
+	import org.lala.event.EventBus;
+	import org.lala.event.MukioEvent;
 	import flash.display.DisplayObject;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
@@ -24,6 +28,7 @@ package org.lala.plugins {
 		private var _pos:Object = { x:0.5, y:1 };//输入框位置的百分比,(0.5,1)代表底部中间
 		private var _hadMove:Boolean;//是否移动过
 		private var _inputting:Boolean;
+		private var _config:CommentConfig = CommentConfig.getInstance();
 		
 		public function CommentInput() {
 			initComponents();
@@ -108,7 +113,16 @@ package org.lala.plugins {
 		
 		private function onSendClick(evt:MouseEvent):void {
 			if (_hadMove) return;
-			//trace("send");
+			trace("send");
+			if (sayTxt.text != "") {
+				var data:Object = { };
+				data.type = CommentDataType.NORMAL;
+				data.text = "【我】：" + sayTxt.text;
+				data.color = _config.color;
+				data.size = 25;
+				data.mode = 'toLeft';
+				EventBus.getInstance().sendMukioEvent(MukioEvent.DISPLAY, data);
+			}
 		}
 		
 		private function onTextInput(evt:TextEvent):void {

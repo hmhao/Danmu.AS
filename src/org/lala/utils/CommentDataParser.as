@@ -1,6 +1,6 @@
 package org.lala.utils {
 	import com.adobe.serialization.json.JSON;
-	
+	import org.lala.comments.CommentDataType;
 	/**
 	 * 弹幕文件解析,编码类
 	 * 因兼容原来的弹幕格式缘故,解析代码有相似性.
@@ -147,20 +147,20 @@ package org.lala.utils {
 			var data:Object = {};
 			var textData:Array = [];
 			data.user = item.user;
-			if (item.type == 'normal') {
+			if (item.type == CommentDataType.NORMAL) {
 				data.mode = item.mode;
 				data.color = item.color;
 				data.size = item.size;
 				data.stime = item.stime;
 				data.message = item.text;
-			} else if (item.type == 'zoome') {
+			} else if (item.type == CommentDataType.ZOOME) {
 				textData = [item.text, item.x, item.y, item.alpha, item.style, item.duration, item.inStyle, item.outStyle, item.position, item.tStyle, item.tEffect,];
 				data.mode = item.mode;
 				data.color = item.color;
 				data.size = item.size;
 				data.stime = item.stime;
 				data.message = JSON.encode(textData);
-			} else if (item.type == 'bili') {
+			} else if (item.type == CommentDataType.BILI) {
 				//0~6
 				textData = [item.x, item.y, item.inAlpha + '-' + item.outAlpha, item.duration, item.text, item.rZ, item.rY];
 				if (item.adv) {
@@ -174,7 +174,7 @@ package org.lala.utils {
 				data.size = item.size;
 				data.stime = item.stime;
 				data.message = JSON.encode(textData);
-			} else if (item.type == 'script') {
+			} else if (item.type == CommentDataType.SCRIPT) {
 				data.mode = item.mode;
 				data.color = 0xffffff;
 				data.size = 25;

@@ -71,7 +71,7 @@ package org.lala.plugins {
 			var _p:DisplayObjectContainer = this.parent;
             var _root:DisplayObjectContainer = _p.parent;
 			_root.addChild(clip);
-			//_root.addChild(input);
+			_root.addChild(input);
 			
 			/** 设置播放状态的初值 **/
 			_isPlaying = true;

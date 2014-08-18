@@ -4,6 +4,7 @@ package org.lala.event
     import flash.events.IEventDispatcher;
     
     import org.lala.plugins.CommentView;
+	import org.lala.comments.CommentDataType;
     import org.lala.utils.CommentDataParser;
 
     /**
@@ -67,7 +68,7 @@ package org.lala.event
                 data.text = a[1];
                 data.mode = '10';
             }
-            if(data.type == 'normal')
+            if(data.type == CommentDataType.NORMAL)
             {
                 
                 var sizeTable:Object={
@@ -92,15 +93,15 @@ package org.lala.event
                 data.mode = modeTable[data.mode];
                 data.msg = data.mode;
             }
-            else if(data.type == 'zoome')
+            else if(data.type == CommentDataType.ZOOME)
             {
                 data.msg = data.style + data.position;
             }
-            else if(data.type == 'bili')
+            else if(data.type == CommentDataType.BILI)
             {
                 data.msg = data.mode;
             }
-            else if(data.type == 'script')
+            else if(data.type == CommentDataType.SCRIPT)
             {
                 data.msg = data.mode;
             }

@@ -25,7 +25,7 @@ package org.lala.net
         {
             _repo = [];
             
-            //EventBus.getInstance().addEventListener(MukioEvent.DISPLAY,displayeHandler);
+            EventBus.getInstance().addEventListener(MukioEvent.DISPLAY,displayeHandler);
             //EventBus.getInstance().addEventListener("displayRtmp",displayeHandler);
         }
         /** 接收内部发送的显示消息 **/
