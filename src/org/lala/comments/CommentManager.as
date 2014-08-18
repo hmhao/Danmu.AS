@@ -136,31 +136,28 @@ package org.lala.comments
          */
         public function insert(data:Object):void
         {
-            /*
-            * 拷贝副本
-            */
+            /* 拷贝副本 */
             var obj:Object = {on:false};
             for (var key:String in data)
             {
                 obj[key] = data[key];
             }
-            /*
-            * 如果带有边框,则立即呈现播放
-            */
+			/* 如果没有颜色,则显示默认颜色*/
+			if (!obj.color) 
+			{
+				obj.color = config.color;
+			}
+            /* 如果带有边框,则立即呈现播放 */
             if (obj.border) 
             {
                 this.start(obj);
             }
-            /*
-            * 带有preview属性则不插入时间轴
-            */
+            /* 带有preview属性则不插入时间轴 */
             if (obj.preview) 
             {
                 return;
             }
-            /*
-            * 得到插入位置
-            */
+            /* 得到插入位置 */
             var p:int = bsearch(this.timeLine, obj, function(a:*, b:*):Number {
                 if (a.stime < b.stime) 
                 {
