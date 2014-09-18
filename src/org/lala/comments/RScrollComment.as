@@ -7,9 +7,8 @@ package org.lala.comments
     /** 反向滚动弹幕 **/
     public class RScrollComment extends ScrollComment
     {
-        public function RScrollComment(data:Object)
+        public function RScrollComment()
         {
-            super(data);
         }
         /**
          * 开始播放

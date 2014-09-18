@@ -27,20 +27,16 @@ package org.lala.comments
         /** 时计 **/
         protected var _tm:Timer;
         /** 配置 **/
-        protected var config:CommentConfig = CommentConfig.getInstance();
+        protected var config:CommentConfig;
         /**
          * 构造方法
          * @param	data 弹幕数据信息
          */
-        public function Comment(data:Object) 
+        public function Comment() 
         {
-            item = {};
-            for (var key:String in data)
-            {
-                item[key] = data[key]
-            }
-            init();
+			config = CommentConfig.getInstance();
         }
+		
         /**
         * 设置空间索引和y坐标
         **/
@@ -50,6 +46,18 @@ package org.lala.comments
             this._index = idx;
             this._bottom = py + this.height;
         }
+		/** 
+        * 弹幕数据
+        **/
+		public function set data(item:Object):void 
+		{
+			this.item = item;
+            init();
+		}
+		public function get data():Object 
+		{
+			return this.item;
+		}
         /** 
         * 空间索引读取,在移除出空间时被空间管理者使用
         **/

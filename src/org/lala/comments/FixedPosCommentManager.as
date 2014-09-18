@@ -3,6 +3,7 @@ package org.lala.comments
     import flash.display.Sprite;
     
     import org.lala.event.CommentDataEvent;
+	import org.lala.utils.GeneralFactory;
 
     /** bili的新类型弹幕管理者,比较简单 **/
     public class FixedPosCommentManager extends CommentManager
@@ -13,7 +14,7 @@ package org.lala.comments
         }
         override protected function setSpaceManager():void
         {
-            /** 置空 **/
+            this.commentFactory = new GeneralFactory(FixedPosComment, 0, 20);
         }
         override public function resize(width:Number, height:Number):void
         {
@@ -29,11 +30,7 @@ package org.lala.comments
         }
         override protected function removeFromSpace(cmt:IComment):void
         {
-            /** 置空 **/
-        }
-        override protected function getComment(data:Object):IComment
-        {
-            return new FixedPosComment(data);
+            this.commentFactory.putObject(cmt);
         }
     }
 }

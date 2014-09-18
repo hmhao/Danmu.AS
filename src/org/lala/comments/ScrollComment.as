@@ -12,9 +12,8 @@ package org.lala.comments
         /** 滚动时间 **/
         protected var _dur:Number;
         /** 构造函数 **/
-        public function ScrollComment(data:Object)
+        public function ScrollComment()
         {
-            super(data);
         }
         /** 设置持续时间,在滚动空间管理类中设置 **/
         public function set duration(dur:Number):void

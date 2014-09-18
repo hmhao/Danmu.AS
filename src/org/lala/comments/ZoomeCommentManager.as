@@ -3,6 +3,8 @@ package org.lala.comments
     import flash.display.Sprite;
     
     import org.lala.event.CommentDataEvent;
+	import org.lala.utils.GeneralFactory;
+	
     /** zoome弹幕管理类 **/
     public class ZoomeCommentManager extends CommentManager
     {
@@ -12,7 +14,7 @@ package org.lala.comments
         }
         override protected function setSpaceManager():void
         {
-            /** 置空 **/
+            this.commentFactory = new GeneralFactory(ZoomeComment, 0, 20);
         }
         override public function resize(width:Number, height:Number):void
         {
@@ -30,11 +32,7 @@ package org.lala.comments
         }
         override protected function removeFromSpace(cmt:IComment):void
         {
-            /** 置空 **/
-        }
-        override protected function getComment(data:Object):IComment
-        {
-            return new ZoomeComment(data);
+            this.commentFactory.putObject(cmt);
         }
     }
 }

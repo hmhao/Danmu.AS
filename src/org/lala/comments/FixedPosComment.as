@@ -20,16 +20,21 @@ package org.lala.comments
         /** 动作补间 **/
         private var _tw:ITween;
         /** 构造函数 **/
-        public function FixedPosComment(data:Object)
+        public function FixedPosComment()
         {
-            /** 复制配置 **/
-            item = {};
-            for (var key:String in data)
-            {
-                item[key] = data[key]
-            }
-            init();
         }
+		/** 
+        * 弹幕数据
+        **/
+		public function set data(item:Object):void 
+		{
+			this.item = item;
+            init();
+		}
+		public function get data():Object 
+		{
+			return this.item;
+		}
         /** 开始播放 **/
         public function start():void
         {

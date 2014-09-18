@@ -33,6 +33,8 @@ package org.lala.comments
         protected var _filter:CommentFilter = null;
         /** 弹幕空间管理者 **/
         protected var space_manager:CommentSpaceManager;
+		/** 弹幕创建者工厂 **/
+		protected var commentFactory:GeneralFactory;
         /** 弹幕模式集,用于监听 **/
         protected var mode_list:Array = [];
         /** 普通弹幕配置类 **/
@@ -62,6 +64,7 @@ package org.lala.comments
         protected function setSpaceManager():void
         {
             this.space_manager = new CommentSpaceManager();
+			this.commentFactory = new GeneralFactory(Comment, 20, 20);
         }
         /**
         * 设置弹幕来源,同时监听好弹幕分发事件
@@ -232,6 +235,7 @@ package org.lala.comments
         protected function removeFromSpace(cmt:IComment):void
         {
             this.space_manager.remove(Comment(cmt));
+			this.commentFactory.putObject(cmt);
         }
         /**
          * 获取弹幕对象
@@ -240,7 +244,9 @@ package org.lala.comments
          */
         protected function getComment(data:Object):IComment
         {
-            return new Comment(data);
+            var cmt:Comment = this.commentFactory.getObject() as Comment;
+			cmt.data = data;
+			return cmt;
         }
         /**
          * 当一个弹幕完成播放动作时调用

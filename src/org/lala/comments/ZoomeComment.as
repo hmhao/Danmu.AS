@@ -50,17 +50,21 @@ package org.lala.comments
 		private var twd:ITween;//duration
 		private var tw:ITween;
 		
-		public function ZoomeComment(itm:Object) 
+		public function ZoomeComment() 
 		{
-			//copy config data
-			item = {};
-			for(var key :String in itm)
-			{
-				item[key] = itm[key];
-			}
-			
+		}
+		/** 
+        * 弹幕数据
+        **/
+		public function set data(item:Object):void 
+		{
+			this.item = item;
 			visible = false;
-			init();
+            init();
+		}
+		public function get data():Object 
+		{
+			return this.item;
 		}
 		
 		private function init():void

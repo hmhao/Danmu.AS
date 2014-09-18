@@ -20,6 +20,7 @@ package org.lala.comments
         override protected function setSpaceManager():void
         {
             this.space_manager = CommentSpaceManager(new BottomCommentSpaceManager());
+			this.commentFactory = new GeneralFactory(Comment, 20, 20);
         }
         /**
          * 设置要监听的模式

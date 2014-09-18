@@ -18,6 +18,7 @@ package org.lala.comments
         override protected function setSpaceManager():void
         {
             this.space_manager = CommentSpaceManager(new ScrollCommentSpaceManager());
+			this.commentFactory = new GeneralFactory(ScrollComment, 40, 20);
         }
         /**
          * 设置要监听的模式
@@ -25,15 +26,6 @@ package org.lala.comments
         override protected function setModeList():void
         {
             this.mode_list.push(CommentDataEvent.FLOW_RIGHT_TO_LEFT);
-        }
-        /**
-         * 获取弹幕对象
-         * @param	data 弹幕数据
-         * @return 弹幕呈现方法对象
-         */
-        override protected function getComment(data:Object):IComment
-        {
-            return IComment(new ScrollComment(data));
         }
     }
 }
