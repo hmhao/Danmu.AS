@@ -212,10 +212,12 @@ package org.lala.comments
                 clip.removeChild(DisplayObject(cmt));
             };
             this.add2Space(cmt);
-            /** 添加到舞台 **/
-            clip.addChild(DisplayObject(cmt));
-            /** 压入准备栈,在所有弹幕准备完成后一同出栈 **/
-            prepare_stack.push(cmt);
+			if(Comment(cmt).index>-1){
+				/** 添加到舞台 **/
+				clip.addChild(DisplayObject(cmt));
+				/** 压入准备栈,在所有弹幕准备完成后一同出栈 **/
+				prepare_stack.push(cmt);
+			}
         }
         /**
         * 空间分配

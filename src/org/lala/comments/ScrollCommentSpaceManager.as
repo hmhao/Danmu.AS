@@ -4,7 +4,7 @@ package org.lala.comments
     public class ScrollCommentSpaceManager extends CommentSpaceManager
     {
         /** 滚动秒数,或者要速度恒定则在getSpeed中定义速度 **/
-        private var duration:Number = 3;
+        private var duration:Number = 10;
         
         override public function add(cmt:Comment):void
         {
@@ -50,7 +50,7 @@ package org.lala.comments
         /** 弹幕速度,未在Comment中定义是因为与弹幕空间有关 **/
         private function getSpeed(cmt:Comment):Number
         {
-            return config.speede * 0.5 * (this.Width + cmt.width) / this.duration;
+            return config.speede * (this.Width + cmt.width) / this.duration;
         }
         /** 弹幕结束时间 **/
         private function getEnd(cmt:Comment):Number

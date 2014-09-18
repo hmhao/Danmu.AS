@@ -22,7 +22,7 @@ package org.lala.utils
 		/** 是否显示弹幕,没有存储到本地 **/
         public var visible:Boolean=true;
         /** 粗体 **/
-        public var bold:Boolean = true;
+        public var bold:Boolean = false;
 		/** 颜色 **/
         public var color:uint=0xFFFFFF;
         /** 透明度:0-1 **/
@@ -85,7 +85,7 @@ package org.lala.utils
         
         public function reset():void
         {
-            bold = true;
+            bold = false;
             alpha = 1;
             filterIndex = 0;
             speede = 1;

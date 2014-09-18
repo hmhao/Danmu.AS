@@ -80,8 +80,8 @@ package org.lala.comments
                     return;
                 }
             }
-            this.setY(cmt,index + 1);
-            
+			cmt.setY(0,-1,transformY);
+            //this.setY(cmt,index + 1);
         }
         /** y坐标转换函数(id) **/
         protected function transformY(y:int,cmt:Comment):int
