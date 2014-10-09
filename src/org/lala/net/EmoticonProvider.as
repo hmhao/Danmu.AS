@@ -1,5 +1,9 @@
 package org.lala.net {
 	import com.worlize.gif.GIFPlayer;
+	import com.worlize.gif.GIFDecoder;
+	import com.worlize.gif.events.AsyncDecodeErrorEvent;
+	import com.worlize.gif.events.GIFDecoderEvent;
+	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
@@ -20,6 +24,7 @@ package org.lala.net {
 		private var _curLoadIndex:int = 0;
 		private var _gifArr:Dictionary = new Dictionary();
 		private var _urlLoader:URLLoader;
+		private var _gifDecoder:GIFDecoder;
 		
 		public function EmoticonProvider() {
 			_urlLoader = new URLLoader();
@@ -29,32 +34,53 @@ package org.lala.net {
 			start();
 		}
 		
-		private function onIOError ( evt:IOErrorEvent ):void {
+		private function onIOError (event:IOErrorEvent ):void {
 			trace(_gifSArr[_curLoadIndex] + "is not found");
 			_curLoadIndex++;
-			onComplete();
+			handleDecodeComplete();
 		}
 		
-		private function onComplete ( evt:Event = null):void  {
-			if (evt) {
-				_gifArr[_gifSArr[_curLoadIndex]] = evt.target.data;
+		private function onComplete (event:Event):void  {
+			_gifDecoder = new GIFDecoder();
+			_gifDecoder.addEventListener(GIFDecoderEvent.DECODE_COMPLETE, handleDecodeComplete);
+			_gifDecoder.addEventListener(AsyncDecodeErrorEvent.ASYNC_DECODE_ERROR, handleAsyncDecodeError);
+			_gifDecoder.decodeBytes(event.target.data);
+		}
+		
+		private function handleDecodeComplete(event:GIFDecoderEvent = null):void {
+			if (event) {
+				var gifConfig:Object = {};
+				gifConfig.loopCount = _gifDecoder.loopCount;
+				gifConfig.frames = _gifDecoder.frames;
+				gifConfig.imageWidth = _gifDecoder.width;
+				gifConfig.imageHeight = _gifDecoder.height;
+				_gifDecoder.cleanup();
+				_gifDecoder.removeEventListener(GIFDecoderEvent.DECODE_COMPLETE, handleDecodeComplete);
+				_gifDecoder.removeEventListener(AsyncDecodeErrorEvent.ASYNC_DECODE_ERROR, handleAsyncDecodeError);
+				_gifDecoder = null;
+				_gifArr[_gifSArr[_curLoadIndex]] = gifConfig;
 				_curLoadIndex++;
 			}
-			if(_curLoadIndex<_gifSArr.length)
+			if(_curLoadIndex<_gifSArr.length){
 				_urlLoader.load(new URLRequest("img/" + _gifSArr[_curLoadIndex]));
+			}else {
+				
+			}
+		}
+		
+		private function handleAsyncDecodeError(event:AsyncDecodeErrorEvent):void {
+			trace(_gifSArr[_curLoadIndex] + "decode error");
+			_curLoadIndex++;
+			handleDecodeComplete();
 		}
 		
 		private function start():void {
 			_curLoadIndex = 0;
-			onComplete();
+			handleDecodeComplete();
 		}
 		
-		public function getEmoticon(emoticon:String):ByteArray {
-			var ba:ByteArray = _gifArr[emoticon];
-			var newba:ByteArray = new ByteArray();
-			newba.writeBytes(ba);
-			newba.position = 0;
-			return newba;
+		public function getEmoticon(emoticon:String):Object {
+			return _gifArr[emoticon] || {};
 		}
 		
 		public static function getInstance():EmoticonProvider {

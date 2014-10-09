@@ -32,7 +32,7 @@ package org.lala.comments
         protected var _tm:Timer;
 		/** 文本 **/
 		protected var _textfield:TextField;
-		/**  **/
+		/** 表情 **/
 		protected var _emoticon:GIFPlayer;
         /** 配置 **/
         protected var config:CommentConfig;
@@ -112,7 +112,7 @@ package org.lala.comments
             _textfield.text = item.text;
             _textfield.border = item.border;
 			var emo:EmoticonProvider = EmoticonProvider.getInstance();
-			_emoticon.loadBytes(emo.getEmoticon(emo._gifSArr[Math.floor(Math.random()*emo._gifSArr.length)]));
+			_emoticon.load(emo.getEmoticon(emo._gifSArr[Math.floor(Math.random()*emo._gifSArr.length)]));
 			_emoticon.x = _textfield.x + _textfield.width;
         }
         /**

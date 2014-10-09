@@ -32,7 +32,6 @@ package com.worlize.gif
 
 	[Event(name="complete",type="com.worlize.gif.events.GIFPlayerEvent")]
 	[Event(name="frameRendered",type="com.worlize.gif.events.GIFPlayerEvent")]
-	[Event(name="asyncDecodeError",type="com.worlize.gif.events.AsyncDecodeErrorEvent")]
 	public class GIFPlayer extends Bitmap
 	{
 		[Bindable]
@@ -44,7 +43,6 @@ package com.worlize.gif
 		private var minFrameDelay:Number;
 		private var useSmoothing:Boolean = false;
 		private var lastQuantizationError:Number = 0;
-		private var gifDecoder:GIFDecoder;
 		private var timer:Timer = new Timer(0, 0);
 		private var currentLoop:uint;
 		private var _loopCount:uint;
@@ -57,10 +55,7 @@ package com.worlize.gif
 		
 		public function GIFPlayer(autoPlay:Boolean = true) {
 			this.autoPlay = autoPlay;
-			if (stage) {
-				initMinFrameDelay();
-			}
-			addEventListener(Event.ADDED_TO_STAGE, initMinFrameDelay);
+			minFrameDelay = 33;
 			timer.addEventListener(TimerEvent.TIMER, handleTimer);
 			addEventListener(Event.REMOVED_FROM_STAGE, handleRemovedFromStage);
 		}
@@ -71,10 +66,12 @@ package com.worlize.gif
 			addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage);
 		}
 		
-		protected function handleAddedToStage(event:Event):void {
+		protected function handleAddedToStage(event:Event=null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, handleAddedToStage);
 			if (wasPlaying) {
 				play();
+			}else {
+				autoPlay ? gotoAndPlay(1) : gotoAndStop(1);
 			}
 		}
 		
@@ -84,61 +81,30 @@ package com.worlize.gif
 				super.smoothing = newValue;
 			}
 		}
-				
-		private function initMinFrameDelay(event:Event=null):void {
-//			stage.frameRate = 60;
-			minFrameDelay = 1000 / stage.frameRate;
-		}
 		
-		public function loadBytes(data:ByteArray):void {
+		public function load(data:Object):void {
 			reset();
-			gifDecoder.decodeBytes(data);
+			currentLoop = 0;
+			_loopCount = data.loopCount;
+			_frames = data.frames;
+			_frameCount = _frames.length;
+			_currentFrame = -1;
+			_imageWidth = data.width;
+			_imageHeight = data.height;
+			setReady(true);
+			dispatchEvent(new Event('totalFramesChange'));
+			dispatchEvent(new GIFPlayerEvent(GIFPlayerEvent.COMPLETE));
+			if (stage) {
+				handleAddedToStage();
+			}else {
+				addEventListener(Event.ADDED_TO_STAGE, handleAddedToStage);
+			}
 		}
 		
 		public function reset():void {
 			stop();
 			setReady(false);
-			unloadDecoder();
 			dispose();
-			initDecoder();
-		}
-		
-		protected function initDecoder():void {
-			gifDecoder = new GIFDecoder();
-			gifDecoder.addEventListener(GIFDecoderEvent.DECODE_COMPLETE, handleDecodeComplete);
-			gifDecoder.addEventListener(AsyncDecodeErrorEvent.ASYNC_DECODE_ERROR, handleAsyncDecodeError);
-		}
-		
-		protected function unloadDecoder():void {
-			if (gifDecoder) {
-				gifDecoder.removeEventListener(GIFDecoderEvent.DECODE_COMPLETE, handleDecodeComplete);
-				gifDecoder.removeEventListener(AsyncDecodeErrorEvent.ASYNC_DECODE_ERROR, handleAsyncDecodeError);
-				gifDecoder = null;
-			}
-		}
-		
-		protected function handleDecodeComplete(event:GIFDecoderEvent):void {
-//			trace("Decode complete.  Total decoding time: " + gifDecoder.totalDecodeTime + " Blocking decode time: " + gifDecoder.blockingDecodeTime);
-			currentLoop = 0;
-			_loopCount = gifDecoder.loopCount;
-			_frames = gifDecoder.frames;
-			_frameCount = _frames.length;
-			_currentFrame = -1;
-			_imageWidth = gifDecoder.width;
-			_imageHeight = gifDecoder.height;
-			gifDecoder.cleanup();
-			unloadDecoder();
-			setReady(true);
-			dispatchEvent(new Event('totalFramesChange'));
-			dispatchEvent(new GIFPlayerEvent(GIFPlayerEvent.COMPLETE));
-			if (stage) {
-				if (autoPlay) {
-					gotoAndPlay(1);
-				}
-				else {
-					gotoAndStop(1);
-				}
-			}
 		}
 		
 		private function handleTimer(event:TimerEvent):void {
@@ -236,10 +202,7 @@ package com.worlize.gif
 		}
 
 		public function dispose():void {
-			if (_frames === null) { return; }
-			for (var i:int = 0; i < _frames.length; i ++) {
-				_frames[i].bitmapData.dispose();
-			}
+			_frames = null;
 		}
 		
 		public function get playing():Boolean {
@@ -273,16 +236,12 @@ package com.worlize.gif
 		}
 		
 		protected function get currentFrameObject():GIFFrame {
-			return _frames[_currentFrame];
+			return _frames ? _frames[_currentFrame] : null;
 		}
 		
 		protected function get previousFrameObject():GIFFrame {
 			if (_currentFrame === 0) { return null; }
-			return _frames[_currentFrame-1];
-		}
-		
-		protected function handleAsyncDecodeError(event:AsyncDecodeErrorEvent):void {
-			dispatchEvent(event.clone());
+			return _frames ? _frames[_currentFrame-1] : null;
 		}
 		
 		override public function get width():Number {
