@@ -49,6 +49,7 @@ package {
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
+			org.lala.net.EmoticonProvider.getInstance();
 		}
 		
 		private function onResize(evt:Event):void {

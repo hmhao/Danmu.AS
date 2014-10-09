@@ -13,11 +13,10 @@ package org.lala.net {
 	 */
 	public class EmoticonProvider {
 		private static var instance:EmoticonProvider;
-		public var _gifSArr:Array = ["hi.gif"];
-		/*public var _gifSArr:Array = ["hi.gif", "崇拜.gif", "鬼脸.gif", 
+		public var _gifSArr:Array = ["hi.gif", "崇拜.gif", "鬼脸.gif", 
 									"害羞.gif", "加油.gif", "接钱.gif", 
 									"惊吓.gif", "忙碌.gif", "扭捏.gif", 
-									"撒花.gif", "稍等.gif", "喜欢.gif"];*/
+									"撒花.gif", "稍等.gif", "喜欢.gif"];
 		private var _curLoadIndex:int = 0;
 		private var _gifArr:Dictionary = new Dictionary();
 		private var _urlLoader:URLLoader;
@@ -38,9 +37,7 @@ package org.lala.net {
 		
 		private function onComplete ( evt:Event = null):void  {
 			if (evt) {
-				var gif:GIFPlayer = new GIFPlayer();
-				gif.loadBytes(evt.target.data);
-				_gifArr[_gifSArr[_curLoadIndex]] = gif;
+				_gifArr[_gifSArr[_curLoadIndex]] = evt.target.data;
 				_curLoadIndex++;
 			}
 			if(_curLoadIndex<_gifSArr.length)
@@ -52,8 +49,12 @@ package org.lala.net {
 			onComplete();
 		}
 		
-		public function getEmoticon(emoticon:String):GIFPlayer {
-			return _gifArr[emoticon];
+		public function getEmoticon(emoticon:String):ByteArray {
+			var ba:ByteArray = _gifArr[emoticon];
+			var newba:ByteArray = new ByteArray();
+			newba.writeBytes(ba);
+			newba.position = 0;
+			return newba;
 		}
 		
 		public static function getInstance():EmoticonProvider {

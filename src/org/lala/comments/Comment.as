@@ -1,20 +1,24 @@
 package org.lala.comments 
 {
-    import flash.display.DisplayObject;
+	import com.worlize.gif.GIFPlayer;
+	import flash.display.Sprite;
     import flash.events.TimerEvent;
     import flash.filters.*;
+	import flash.net.URLRequest;
     import flash.text.TextField;
-    import flash.text.TextFormat;
+	import flash.text.TextFormat;
+	import flash.text.TextFieldAutoSize;
     import flash.utils.Timer;
-    
+	
     import org.lala.utils.CommentConfig;
+	import org.lala.net.EmoticonProvider;
     
     /**
      * Comment类,定义了弹幕的生命周期内各种动作:本身为基本字幕
      * 弹幕在舞台的起始与终结
      * @author aristotle9
      */
-    public class Comment extends TextField implements IComment
+    public class Comment extends Sprite implements IComment
     {
         /** 完成地调用的函数,无参数 **/
         protected var _complete:Function;
@@ -26,6 +30,10 @@ package org.lala.comments
         protected var _bottom:int;
         /** 时计 **/
         protected var _tm:Timer;
+		/** 文本 **/
+		protected var _textfield:TextField;
+		/**  **/
+		protected var _emoticon:GIFPlayer;
         /** 配置 **/
         protected var config:CommentConfig;
         /**
@@ -35,6 +43,14 @@ package org.lala.comments
         public function Comment() 
         {
 			config = CommentConfig.getInstance();
+			_textfield = new TextField();
+			_textfield.autoSize = TextFieldAutoSize.LEFT;
+			_textfield.selectable = false;
+			_textfield.borderColor = 0x66FFFF;
+            _textfield.filters = config.filter;
+			_emoticon = new GIFPlayer();
+			addChild(_textfield);
+			addChild(_emoticon);
         }
 		
         /**
@@ -91,13 +107,13 @@ package org.lala.comments
          */
         protected function init():void
         {
-            this.defaultTextFormat = new TextFormat(config.font, config.sizee * item.size, item.color, config.bold);
-            this.alpha = config.alpha;
-            this.autoSize = "left";
-            this.text = item.text;
-            this.border = item.border;
-            this.borderColor = 0x66FFFF;
-            this.filters = config.filter;
+            _textfield.defaultTextFormat = new TextFormat(config.font, config.sizee * item.size, item.color, config.bold);
+            _textfield.alpha = config.alpha;
+            _textfield.text = item.text;
+            _textfield.border = item.border;
+			var emo:EmoticonProvider = EmoticonProvider.getInstance();
+			_emoticon.loadBytes(emo.getEmoticon(emo._gifSArr[Math.floor(Math.random()*emo._gifSArr.length)]));
+			_emoticon.x = _textfield.x + _textfield.width;
         }
         /**
          * 恢复播放
