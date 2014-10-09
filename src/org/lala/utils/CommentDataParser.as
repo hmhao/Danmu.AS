@@ -8,6 +8,26 @@ package org.lala.utils {
 	public class CommentDataParser {
 		/** 弹幕计数 **/
 		public static var length:Number = 0;
+		/**
+		 * 解析kankan弹幕文件
+		 * @param json 弹幕文件的json
+		 * @param foo 对单个弹幕数据的处理函数:第一个参数为消息名,用来分类弹幕,第二个参数为data:Object
+		 **/
+		public static function kankan_parse(json:Object, foo:Function):void {
+			for (var time:String in json) {
+				var obj:Object = {};
+				/*obj.color = uint(item.message.@color);
+				obj.size = uint(item.message.@fontsize);
+				obj.mode = uint(item.message.@mode);
+				obj.stime = parseFloat(item.playTime);
+				obj.date = item.times;
+				obj.text = text_string(item.message);
+				obj.border = false;
+				obj.user = null;
+				obj.id = length++;
+				foo(String(obj.mode), obj);*/
+			}
+		}
 		
 		/**
 		 * 解析旧的acfun弹幕文件

@@ -45,7 +45,7 @@ package {
 			commentView.initPlugin();
 			commentView.resize(stage.stageWidth, stage.stageHeight);
 			commentView.showComments(commentButton.isOn);
-			playerTool.loadCmtFile("2093520.xml");
+			playerTool.loadCmtFile("danmu.json");
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
