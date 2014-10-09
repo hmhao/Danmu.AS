@@ -63,8 +63,6 @@ package org.lala.net {
 			}
 			if(_curLoadIndex<_gifSArr.length){
 				_urlLoader.load(new URLRequest("img/" + _gifSArr[_curLoadIndex]));
-			}else {
-				
 			}
 		}
 		
