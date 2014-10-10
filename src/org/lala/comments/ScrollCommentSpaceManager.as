@@ -9,7 +9,7 @@ package org.lala.comments
         override public function add(cmt:Comment):void
         {
             cmt.x = this.Width;
-            ScrollComment(cmt).duration = (this.Width + cmt.width) / this.getSpeed(cmt);
+            ScrollComment(cmt).duration = duration;//(this.Width + cmt.width) / this.getSpeed(cmt);
             if(cmt.height >= this.Height)
             {
                 cmt.setY(0,-1,transformY);

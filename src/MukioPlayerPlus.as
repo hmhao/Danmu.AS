@@ -45,14 +45,15 @@ package {
 			commentView.initPlugin();
 			commentView.resize(stage.stageWidth, stage.stageHeight);
 			commentView.showComments(commentButton.isOn);
-			playerTool.loadCmtFile("danmu.json");
+			playerTool.loadCmtFile("danmu2.json");
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
+			onResize(null);
 		}
 		
 		private function onResize(evt:Event):void {
-			commentView.resize(stage.stageWidth, stage.stageHeight);
+			commentView.resize(stage.stageWidth, stage.stageHeight-80);
 		}
 		
 		private function onCommentButtonClick(evt:MouseEvent):void {
