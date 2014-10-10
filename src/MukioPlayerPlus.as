@@ -49,11 +49,16 @@ package {
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
+			stage.addEventListener(MouseEvent.CLICK, onMouseClick);
 			onResize(null);
 		}
 		
 		private function onResize(evt:Event):void {
 			commentView.resize(stage.stageWidth, stage.stageHeight-80);
+		}
+		
+		private function onMouseClick(evt:MouseEvent):void {
+			commentView.isPlaying = !commentView.isPlaying;
 		}
 		
 		private function onCommentButtonClick(evt:MouseEvent):void {

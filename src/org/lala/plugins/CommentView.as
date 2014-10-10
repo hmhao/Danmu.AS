@@ -140,7 +140,6 @@ package org.lala.plugins {
 			this._clip.visible = value;
             this._clip.clear();
         }
-
 		
 		/**
 		 * 当前时间
@@ -227,6 +226,7 @@ package org.lala.plugins {
 		}
 		public function set isPlaying(value:Boolean):void {
 			_isPlaying = value;
+			value ? this._clip.resume() : this._clip.pause();
 		}
 	}
 }

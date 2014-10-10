@@ -9,10 +9,6 @@ package org.lala.plugins
 	public class CommentClip extends Sprite {
 		public function CommentClip() {
 		}
-		/** 是否显示评论视图 **/
-		public function show(value:Boolean):void {
-			this.visible = value;
-		}
 		/** 清除舞台上所有可视的评论实例 **/
 		public function clear():void {
 			var cmt:IComment;
