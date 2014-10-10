@@ -1,5 +1,6 @@
 package {
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import org.lala.net.CommentServer;
 	import org.lala.plugins.CommentView;
 	import org.lala.plugins.CommentButton;
@@ -25,6 +26,8 @@ package {
 		private var conf:CommentXMLConfig;
 		/** 弹幕报务器接口 **/
 		private var server:CommentServer;
+		/** 状态文本**/
+		private var status:TextField;
 		
 		public function MukioPlayerPlus() {
 			this.addEventListener(Event.ADDED_TO_STAGE, playerReadyHandler);
@@ -47,6 +50,14 @@ package {
 			commentView.showComments(commentButton.isOn);
 			playerTool.loadCmtFile("danmu2.json");
 			
+			status = new TextField();
+			status.autoSize = "left";
+			status.textColor = 0xFFFFFF;
+			status.text = "play";
+			status.x = 0;
+			status.y = stage.stageHeight - status.height;
+			this.addChild(status);
+			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
 			stage.addEventListener(Event.RESIZE, onResize);
 			stage.addEventListener(MouseEvent.CLICK, onMouseClick);
@@ -58,7 +69,10 @@ package {
 		}
 		
 		private function onMouseClick(evt:MouseEvent):void {
-			commentView.isPlaying = !commentView.isPlaying;
+			if(evt.target == evt.currentTarget){
+				commentView.isPlaying = !commentView.isPlaying;
+				status.text = commentView.isPlaying ? "play" : "pause";
+			}
 		}
 		
 		private function onCommentButtonClick(evt:MouseEvent):void {

@@ -139,6 +139,7 @@ package org.lala.plugins {
 			this._input.visible = value;
 			this._clip.visible = value;
             this._clip.clear();
+			(value && _isPlaying) ? this._clip.resume() : this._clip.pause();
         }
 		
 		/**
@@ -226,7 +227,7 @@ package org.lala.plugins {
 		}
 		public function set isPlaying(value:Boolean):void {
 			_isPlaying = value;
-			value ? this._clip.resume() : this._clip.pause();
+			(value && this.cmtConfig.visible) ? this._clip.resume() : this._clip.pause();
 		}
 	}
 }
