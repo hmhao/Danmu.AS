@@ -1,6 +1,5 @@
 package org.lala.comments 
 {
-    import flash.display.DisplayObject;
     import flash.display.Sprite;
     
     import org.lala.event.*;
@@ -22,7 +21,7 @@ package org.lala.comments
         /** 时间轴,为弹幕数据信息数组,按时间顺序插入 **/
         protected var timeLine:Array = [];
         /** 弹幕舞台 **/
-        protected var clip:Sprite;
+        protected var clip:CommentClip;
         /** 弹幕来源 **/
         protected var _provider:CommentProvider = null;
         /** 弹幕过滤器 **/
@@ -40,7 +39,7 @@ package org.lala.comments
         /**
          * 构造函数
          */
-        public function CommentManager(clip:Sprite) 
+        public function CommentManager(clip:CommentClip) 
         {
             this.clip = clip;
             this.setSpaceManager();
@@ -175,13 +174,13 @@ package org.lala.comments
 			{
                 self.complete(data);
                 self.removeFromSpace(cmt);
-                clip.removeChild(DisplayObject(cmt));
+                clip.remove(cmt);
             };
             this.add2Space(cmt);
 			if (Comment(cmt).index > -1)
 			{
 				/** 添加到舞台 **/
-				clip.addChild(DisplayObject(cmt));
+				clip.add(cmt);
 				/** 压入准备栈,在所有弹幕准备完成后一同出栈 **/
 				prepare_stack.push(cmt);
 			}

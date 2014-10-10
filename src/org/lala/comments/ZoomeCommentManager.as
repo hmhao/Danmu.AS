@@ -1,14 +1,14 @@
 package org.lala.comments
 {
     import flash.display.Sprite;
-    
+    import org.lala.plugins.CommentClip;
     import org.lala.event.CommentDataEvent;
 	import org.lala.utils.GeneralFactory;
 	
     /** zoome弹幕管理类 **/
     public class ZoomeCommentManager extends CommentManager
     {
-        public function ZoomeCommentManager(clip:Sprite)
+        public function ZoomeCommentManager(clip:CommentClip)
         {
             super(clip);
         }

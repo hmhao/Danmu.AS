@@ -1,7 +1,7 @@
 package org.lala.comments
 {
     import flash.display.Sprite;
-    
+    import org.lala.plugins.CommentClip;
     import org.lala.event.CommentDataEvent;
     
     /**
@@ -12,7 +12,7 @@ package org.lala.comments
     public class ScriptCommentManager extends CommentManager
     {
         /** 构造函数 **/
-        public function ScriptCommentManager(clip:Sprite)
+        public function ScriptCommentManager(clip:CommentClip)
         {
             super(clip);
         }

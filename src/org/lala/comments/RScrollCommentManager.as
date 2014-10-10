@@ -1,14 +1,14 @@
 package org.lala.comments
 {
     import flash.display.Sprite;
-
+	import org.lala.plugins.CommentClip;
     import org.lala.event.*;
     import org.lala.net.*;
     import org.lala.utils.*;
     /** 反向滚动弹幕 **/
     public class RScrollCommentManager extends ScrollCommentManager
     {
-        public function RScrollCommentManager(clip:Sprite)
+        public function RScrollCommentManager(clip:CommentClip)
         {
             super(clip);
         }

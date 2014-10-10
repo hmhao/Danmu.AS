@@ -1,5 +1,6 @@
 package org.lala.plugins 
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import org.lala.comments.IComment;
 	/**
@@ -8,6 +9,14 @@ package org.lala.plugins
 	 **/
 	public class CommentClip extends Sprite {
 		public function CommentClip() {
+		}
+		/** 往舞台添加可视的评论实例 **/
+		public function add(comment:IComment):void {
+			this.addChild(comment as DisplayObject);
+		}
+		/** 移除舞台上可视的评论实例 **/
+		public function remove(comment:IComment):void {
+			this.removeChild(comment as DisplayObject);
 		}
 		/** 清除舞台上所有可视的评论实例 **/
 		public function clear():void {
