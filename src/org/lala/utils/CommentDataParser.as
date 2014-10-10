@@ -14,18 +14,21 @@ package org.lala.utils {
 		 * @param foo 对单个弹幕数据的处理函数:第一个参数为消息名,用来分类弹幕,第二个参数为data:Object
 		 **/
 		public static function kankan_parse(json:Object, foo:Function):void {
+			var obj:Object;
 			for (var time:String in json) {
-				var obj:Object = {};
-				/*obj.color = uint(item.message.@color);
-				obj.size = uint(item.message.@fontsize);
-				obj.mode = uint(item.message.@mode);
-				obj.stime = parseFloat(item.playTime);
-				obj.date = item.times;
-				obj.text = text_string(item.message);
-				obj.border = false;
-				obj.user = null;
-				obj.id = length++;
-				foo(String(obj.mode), obj);*/
+				for each(var item:Object in json[time]) {
+					obj = { };
+					obj.color = 0xFFFFFF * Math.random();
+					obj.size = 24;
+					obj.mode = 1;
+					obj.stime = parseInt(time);
+					obj.date = "";
+					obj.text = item.content;
+					obj.border = false;
+					obj.user = item.userid;
+					obj.id = item.id;
+					foo(String(obj.mode), obj);
+				}
 			}
 		}
 		
