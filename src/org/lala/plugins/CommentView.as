@@ -95,7 +95,7 @@ package org.lala.plugins {
 			//_clip.scaleY = _clip.scaleX = r;
 			//_clip.x = (w - cmtConfig.width * r) / 2;
 			//_clip.y = (h - cmtConfig.height * r) / 2;
-			
+			_clip.resize(w, h);
 			_input.setRectangle(w, h);//设置宽高会自动调整位置了
 			
 			/** 通知到位 **/
