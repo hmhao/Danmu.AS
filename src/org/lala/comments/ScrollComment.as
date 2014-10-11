@@ -21,7 +21,7 @@ package org.lala.comments
         public function set duration(dur:Number):void
         {
             this._dur = dur;
-			this._dx = (this.x + this.width) / dur;
+			this._dx = (this.x + this.width) / (dur*30);
         }
 		
 		public function update():Boolean 
@@ -45,8 +45,8 @@ package org.lala.comments
          */
         protected function completeHandler(event:TweenEvent):void
         {
-            /*_complete();
-            _tw = null;
+            _complete();
+            /*_tw = null;
             delete this;*/
         }
         /**

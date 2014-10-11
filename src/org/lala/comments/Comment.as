@@ -1,12 +1,14 @@
 package org.lala.comments 
 {
-    import flash.display.DisplayObject;
+	import flash.display.BitmapData;
     import flash.events.TimerEvent;
     import flash.filters.*;
+	import flash.net.URLRequest;
     import flash.text.TextField;
-    import flash.text.TextFormat;
+	import flash.text.TextFormat;
+	import flash.text.TextFieldAutoSize;
     import flash.utils.Timer;
-    
+	
     import org.lala.utils.CommentConfig;
     
     /**
@@ -14,8 +16,11 @@ package org.lala.comments
      * 弹幕在舞台的起始与终结
      * @author aristotle9
      */
-    public class Comment extends TextField implements IComment
+    public class Comment implements IComment
     {
+		public var x:Number = 0;
+		public var y:Number = 0;
+		
         /** 完成地调用的函数,无参数 **/
         protected var _complete:Function;
         /** 配置数据 **/
@@ -26,6 +31,10 @@ package org.lala.comments
         protected var _bottom:int;
         /** 时计 **/
         protected var _tm:Timer;
+		/** 文本 **/
+		protected var _textfield:TextField;
+		/** 文本bitmapdata **/
+		protected var _bitmapdata:BitmapData;
         /** 配置 **/
         protected var config:CommentConfig;
         /**
@@ -35,6 +44,11 @@ package org.lala.comments
         public function Comment() 
         {
 			config = CommentConfig.getInstance();
+			_textfield = new TextField();
+			_textfield.autoSize = TextFieldAutoSize.LEFT;
+			_textfield.selectable = false;
+			_textfield.borderColor = 0x66FFFF;
+            _textfield.filters = config.filter;
         }
 		
         /**
@@ -79,6 +93,18 @@ package org.lala.comments
         {
             return this.x + this.width;
         }
+        public function get width():int
+        {
+            return _textfield.width;
+        }
+        public function get height():int
+        {
+            return _textfield.height;
+        }
+		public function get bitmapdata():BitmapData 
+		{
+			return _bitmapdata;
+		}
         /**
         * 开始时间
         **/
@@ -91,13 +117,15 @@ package org.lala.comments
          */
         protected function init():void
         {
-            this.defaultTextFormat = new TextFormat(config.font, config.sizee * item.size, item.color, config.bold);
-            this.alpha = config.alpha;
-            this.autoSize = "left";
-            this.text = item.text;
-            this.border = item.border;
-            this.borderColor = 0x66FFFF;
-            this.filters = config.filter;
+            _textfield.defaultTextFormat = new TextFormat(config.font, config.sizee * item.size, item.color, config.bold);
+            _textfield.alpha = config.alpha;
+            _textfield.text = item.text;
+            _textfield.border = item.border;
+			if (_bitmapdata) {
+				_bitmapdata.dispose();
+			}
+			_bitmapdata = new BitmapData(_textfield.width, _textfield.height, true, 0);
+			_bitmapdata.draw(_textfield);
         }
         /**
          * 恢复播放
@@ -137,7 +165,6 @@ package org.lala.comments
         {
             this._complete = foo;
         }
-		
 		public function stop():void {
 			this._tm.stop();
 			this.completeHandler(null);
