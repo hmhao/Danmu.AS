@@ -1,6 +1,4 @@
 package {
-	import flash.events.MouseEvent;
-	import flash.text.TextField;
 	import org.lala.net.CommentServer;
 	import org.lala.plugins.CommentView;
 	import org.lala.plugins.CommentButton;
@@ -8,9 +6,12 @@ package {
 	import org.lala.utils.CommentDataParser;
 	import org.lala.utils.CommentXMLConfig;
 	import org.lala.utils.PlayerTool;
+	import com.flashdynamix.utils.SWFProfiler;
 	
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
+	import flash.text.TextField;
+	import flash.events.MouseEvent;
 	import flash.events.Event;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
@@ -34,6 +35,7 @@ package {
 		}
 		
 		private function playerReadyHandler(evt:Event):void {
+			SWFProfiler.init(stage, this);
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			playerTool = new PlayerTool();
