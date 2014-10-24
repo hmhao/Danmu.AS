@@ -5,7 +5,9 @@ package org.lala.plugins
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.utils.Timer;
 	import org.lala.comments.IComment;
 	/**
 	 * 评论播放视图
@@ -17,11 +19,14 @@ package org.lala.plugins
 		private var _clip:Vector.<IComment>;
 		private var _bitmap:Bitmap;
 		private var _bitmapdata:BitmapData;
+		//private var _timer:Timer;
 		
 		public function CommentClip() {
 			this._clip = new Vector.<IComment>();
 			this._bitmap = new Bitmap();
 			this.addChild(this._bitmap);
+			/*this._timer = new Timer(15);
+			this._timer.addEventListener(TimerEvent.TIMER, onRenderHander); */ 
 		}
 		
 		private function onRenderHander(evt:Event):void {
@@ -44,6 +49,7 @@ package org.lala.plugins
 				cmt = removeVet[i] as Object;
 				cmt.stop();
 			}
+			//evt.updateAfterEvent();//TimerEvent时用
 		}
 		
 		/** 播放器调整大小时被调用 **/
@@ -80,6 +86,7 @@ package org.lala.plugins
 				cmt.pause();
 			}*/
 			removeEventListener(Event.ENTER_FRAME, onRenderHander);
+			//this._timer.reset();
 			trace("comment pause");
 		}
 		/** 恢复舞台上所有可视的评论实例的动作 **/
@@ -90,6 +97,7 @@ package org.lala.plugins
 				cmt.resume();
 			}*/
 			addEventListener(Event.ENTER_FRAME, onRenderHander);
+			//this._timer.start();
 			trace("comment start");
 		}
 	}
