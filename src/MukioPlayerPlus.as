@@ -62,7 +62,9 @@ package {
 			this.addChild(status);
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
-			stage.addEventListener(Event.RESIZE, onResize);		}
+			stage.addEventListener(Event.RESIZE, onResize);
+			stage.addEventListener(MouseEvent.CLICK, onMouseClick);
+		}
 		
 		private function onResize(evt:Event):void {
 			commentView.resize(stage.stageWidth, stage.stageHeight-80);
