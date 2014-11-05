@@ -112,7 +112,7 @@ package org.lala.comments
             _textfield.text = item.text;
             _textfield.border = item.border;
 			var emo:EmoticonProvider = EmoticonProvider.getInstance();
-			_emoticon.load(emo.getEmoticon(emo._gifSArr[Math.floor(Math.random()*emo._gifSArr.length)]));
+			_emoticon.load(emo.getEmoticon(emo.gifData[Math.floor(Math.random()*emo.gifData.length)].name));
 			_emoticon.x = _textfield.x + _textfield.width;
         }
         /**
@@ -158,5 +158,6 @@ package org.lala.comments
 			this._tm.stop();
 			this.completeHandler(null);
 		}
+		
     }
 }
