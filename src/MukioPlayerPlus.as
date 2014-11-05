@@ -1,5 +1,4 @@
 package {
-	import flash.events.MouseEvent;
 	import org.lala.net.CommentServer;
 	import org.lala.plugins.CommentView;
 	import org.lala.plugins.CommentButton;
@@ -7,9 +6,12 @@ package {
 	import org.lala.utils.CommentDataParser;
 	import org.lala.utils.CommentXMLConfig;
 	import org.lala.utils.PlayerTool;
+	import com.flashdynamix.utils.SWFProfiler;
 	
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
+	import flash.text.TextField;
+	import flash.events.MouseEvent;
 	import flash.events.Event;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
@@ -25,12 +27,15 @@ package {
 		private var conf:CommentXMLConfig;
 		/** 弹幕报务器接口 **/
 		private var server:CommentServer;
+		/** 状态文本**/
+		private var status:TextField;
 		
 		public function MukioPlayerPlus() {
 			this.addEventListener(Event.ADDED_TO_STAGE, playerReadyHandler);
 		}
 		
 		private function playerReadyHandler(evt:Event):void {
+			SWFProfiler.init(stage, this);
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			playerTool = new PlayerTool();
@@ -45,15 +50,29 @@ package {
 			commentView.initPlugin();
 			commentView.resize(stage.stageWidth, stage.stageHeight);
 			commentView.showComments(commentButton.isOn);
-			playerTool.loadCmtFile("2093520.xml");
+			//playerTool.loadCmtFile("2093520.xml");
+			playerTool.loadCmtFile("danmu2.json");
+			
+			status = new TextField();
+			status.autoSize = "left";
+			status.textColor = 0xFFFFFF;
+			status.text = "play";
+			status.x = 0;
+			status.y = stage.stageHeight - status.height;
+			this.addChild(status);
 			
 			commentButton.addEventListener(MouseEvent.CLICK, onCommentButtonClick);
-			stage.addEventListener(Event.RESIZE, onResize);
-			org.lala.net.EmoticonProvider.getInstance();
-		}
+			stage.addEventListener(Event.RESIZE, onResize);		}
 		
 		private function onResize(evt:Event):void {
-			commentView.resize(stage.stageWidth, stage.stageHeight);
+			commentView.resize(stage.stageWidth, stage.stageHeight-80);
+		}
+		
+		private function onMouseClick(evt:MouseEvent):void {
+			if(evt.target == evt.currentTarget){
+				commentView.isPlaying = !commentView.isPlaying;
+				status.text = commentView.isPlaying ? "play" : "pause";
+			}
 		}
 		
 		private function onCommentButtonClick(evt:MouseEvent):void {

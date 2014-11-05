@@ -1,14 +1,14 @@
 package org.lala.comments
 {
     import flash.display.Sprite;
-    
+    import org.lala.plugins.CommentClip;
     import org.lala.event.CommentDataEvent;
 	import org.lala.utils.GeneralFactory;
 
     /** bili的新类型弹幕管理者,比较简单 **/
     public class FixedPosCommentManager extends CommentManager
     {
-        public function FixedPosCommentManager(clip:Sprite)
+        public function FixedPosCommentManager(clip:CommentClip)
         {
             super(clip);
         }

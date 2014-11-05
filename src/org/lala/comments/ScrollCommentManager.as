@@ -1,14 +1,14 @@
 package org.lala.comments
 {
     import flash.display.Sprite;
-    
+    import org.lala.plugins.CommentClip;
     import org.lala.event.*;
     import org.lala.net.*;
     import org.lala.utils.*;
     /** 滚动字幕管理 **/
     public class ScrollCommentManager extends CommentManager
     {
-        public function ScrollCommentManager(clip:Sprite)
+        public function ScrollCommentManager(clip:CommentClip)
         {
             super(clip);
         }

@@ -1,6 +1,5 @@
 package org.lala.comments 
 {
-    import flash.display.DisplayObject;
     import flash.display.Sprite;
     
     import org.lala.event.*;
@@ -21,12 +20,8 @@ package org.lala.comments
     {
         /** 时间轴,为弹幕数据信息数组,按时间顺序插入 **/
         protected var timeLine:Array = [];
-        /** 时间轴当前位置索引 **/
-        protected var pointer:int = 0;
-        /** 保存上一次time调手时的时间位置 **/
-        protected var oldPosition:Number = 0;
         /** 弹幕舞台 **/
-        protected var clip:Sprite;
+        protected var clip:CommentClip;
         /** 弹幕来源 **/
         protected var _provider:CommentProvider = null;
         /** 弹幕过滤器 **/
@@ -44,7 +39,7 @@ package org.lala.comments
         /**
          * 构造函数
          */
-        public function CommentManager(clip:Sprite) 
+        public function CommentManager(clip:CommentClip) 
         {
             this.clip = clip;
             this.setSpaceManager();
@@ -116,8 +111,6 @@ package org.lala.comments
         public function clean():void
         {
             this.timeLine = [];
-            this.pointer = 0;
-            this.oldPosition = 0;
         }
         /**
          * 暂停在该Manager上的所有弹幕的动作
@@ -160,43 +153,11 @@ package org.lala.comments
             {
                 return;
             }
-            /* 得到插入位置 */
-            var p:int = bsearch(this.timeLine, obj, function(a:*, b:*):Number {
-                if (a.stime < b.stime) 
-                {
-                    return -1;
-                }
-                else
-                    if (a.stime > b.stime)
-                    {
-                        return 1;
-                    }
-                    else 
-                    {
-                        if (a.date < b.date)
-                        {
-                            return -1;
-                        }
-                        else if (a.date > b.date)
-                        {
-                            return 1;
-                        } else 
-                        {
-                            return 0;
-                        }
-                    }
-            });
-            /*
-            * 插入
-            */
-            this.timeLine.splice(p, 0, obj);
-            /*
-            * 在时间轴当前位置之前插入,要把当前位置向后移动
-            */
-            if (p <= this.pointer)
-            {
-                this.pointer ++;
-            }
+            if (timeLine[data.stime] == null) 
+			{
+				timeLine[data.stime] = [];
+			}
+			timeLine[data.stime].push(data);
             start_all();
         }
         /**
@@ -209,15 +170,17 @@ package org.lala.comments
             data['on'] = true;
             var cmt:IComment = this.getComment(data);
             var self:CommentManager = CommentManager(this);
-            cmt.complete = function():void {
+            cmt.complete = function():void 
+			{
                 self.complete(data);
                 self.removeFromSpace(cmt);
-                clip.removeChild(DisplayObject(cmt));
+                clip.remove(cmt);
             };
             this.add2Space(cmt);
-			if(Comment(cmt).index>-1){
+			if (Comment(cmt).index > -1)
+			{
 				/** 添加到舞台 **/
-				clip.addChild(DisplayObject(cmt));
+				clip.add(cmt);
 				/** 压入准备栈,在所有弹幕准备完成后一同出栈 **/
 				prepare_stack.push(cmt);
 			}
@@ -272,33 +235,14 @@ package org.lala.comments
          */
         public function time(position:Number):void
         {
-            /** 前移微小步,以方便0时间的弹幕展示 **/
-            position = position - 0.001;
-            /** 当时间头到底,或者前后时间位置相差大于2秒时,强行移动时间头,这是自动判断的,所以该类没有专门的seek事件处理函数 **/
-            if (this.pointer >= this.timeLine.length || Math.abs(this.oldPosition - position) >= 2) {
-                this.seek(position);
-                this.oldPosition = position;
-                if (this.timeLine.length <= this.pointer)
-                {
-                    return;
-                }
-            } else
-            {
-                this.oldPosition = position;
-            }
-            for (; this.pointer < this.timeLine.length; this.pointer++ ) {
-                if (this.getData(this.pointer)['stime'] <= position) 
-                {
-                    if (this.validate(this.getData(this.pointer)))
-                    {
-                        this.start(this.getData(this.pointer));
-                    }
-                }
-                else 
-                {
-                    break;
-                }
-            }
+            position = Math.ceil(position);
+			if (this.timeLine[position] && this.timeLine[position].length > 0) 
+			{
+				for each(var data:Object in this.timeLine[position]) 
+				{
+					this.start(data);
+				}
+			}
             //弹出所有准备栈中的可视弹幕实例
             start_all();
         }
@@ -307,59 +251,14 @@ package org.lala.comments
         ***/
         protected function start_all():void
         {
-            if(CommentView.getInstance().isPlaying)
-            {
-                while(prepare_stack.length)
-                {
-                    var cmt:IComment = prepare_stack.pop();
-                    cmt.start();
-                }            
-            }
-            else
-            {
-                while(prepare_stack.length)
-                {
-                    cmt = prepare_stack.pop();
-                    cmt.start();
-                    /** 暂停时发送的弹幕,在显示后立即暂停 **/
-                    cmt.pause();
-                }            
-            }
-        }
-        /**
-         * 提取弹幕数据
-         * @param	index 时间轴上的索引
-         * @return 位置index上的弹幕数据,出错时返回null
-         */
-        protected function getData(index:int):Object
-        {
-            if (index >= 0 && index < this.timeLine.length) 
-            {
-                return this.timeLine[index];
-            }
-            return null;
-        }
-        /**
-         * 拨动Manager的时间头,当前后调用time的position参数相差较大时调用
-         * @param	position 时间,单位秒
-         */
-        protected function seek(position:Number):void
-        {
-            this.pointer = bsearch(this.timeLine, position, function(pos:*, data:*):Number 
-            {
-                if (pos < data.stime)
-                {
-                    return -1;
-                }
-                else if(pos > data.stime)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            });
+			var cmt:IComment;
+			while (prepare_stack.length) 
+			{
+				cmt = prepare_stack.pop();
+				cmt.start();
+				/** 暂停时发送的弹幕,在显示后立即暂停 **/
+				!CommentView.getInstance().isPlaying && cmt.pause();
+			}
         }
         /**
          * 校验函数,决定是否显示该弹幕

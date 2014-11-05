@@ -26,7 +26,7 @@ package org.lala.plugins {
 		/** 弹幕管理者 **/
 		private var managers:Vector.<CommentManager>;
 		/** 弹幕层,类本身是插件层,但是位置不符合弹幕的需求,所以另起一层 **/
-		private var _clip:Sprite;
+		private var _clip:CommentClip;
 		/** 输入框 **/
 		private var _input:CommentInput;
 		/** 时间点 **/
@@ -46,7 +46,7 @@ package org.lala.plugins {
 			}
 			/** 不接收点击事件 **/
 			this.mouseEnabled = this.mouseChildren = false;
-			_clip = new Sprite();
+			_clip = new CommentClip();
 			_clip.name = 'commentviewlayer';
 			_clip.mouseEnabled = _clip.mouseChildren = false;
 			_input = new CommentInput();
@@ -131,24 +131,16 @@ package org.lala.plugins {
 		}
 		
 		private function clearCommentDataHandler(event:CommentDataEvent) : void {
-            this.clearComments();
-        }
-		
-		private function clearComments() : void {
-			var commentArr:Vector.<IComment> = new Vector.<IComment>;
-			var comment:IComment;
-			while (this._clip.numChildren > 0) {
-				comment = this._clip.getChildAt(0) as IComment;
-				comment && comment.stop();
-			}
+            this._clip.clear();
         }
 		
 		public function showComments(value:Boolean) : void {
 			this.cmtConfig.visible = value;
 			this._input.visible = value;
-            this.clearComments();
+			this._clip.visible = value;
+            this._clip.clear();
+			(value && _isPlaying) ? this._clip.resume() : this._clip.pause();
         }
-
 		
 		/**
 		 * 当前时间
@@ -235,6 +227,7 @@ package org.lala.plugins {
 		}
 		public function set isPlaying(value:Boolean):void {
 			_isPlaying = value;
+			(value && this.cmtConfig.visible) ? this._clip.resume() : this._clip.pause();
 		}
 	}
 }
