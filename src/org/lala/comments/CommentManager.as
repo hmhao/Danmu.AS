@@ -197,6 +197,7 @@ package org.lala.comments
         **/
         protected function removeFromSpace(cmt:IComment):void
         {
+			cmt.clear();//回收前需要清除元件内容
             this.space_manager.remove(Comment(cmt));
 			this.commentFactory.putObject(cmt);
         }

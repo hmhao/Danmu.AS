@@ -1,6 +1,8 @@
 package org.lala.comments 
 {
 	import com.worlize.gif.GIFPlayer;
+	import flash.display.DisplayObject;
+	import flash.display.Shape;
 	import flash.display.Sprite;
     import flash.events.TimerEvent;
     import flash.filters.*;
@@ -11,6 +13,7 @@ package org.lala.comments
     import flash.utils.Timer;
 	
     import org.lala.utils.CommentConfig;
+	import org.lala.utils.GeneralFactory;
 	import org.lala.net.EmoticonProvider;
     
     /**
@@ -20,20 +23,27 @@ package org.lala.comments
      */
     public class Comment extends Sprite implements IComment
     {
+		/** 文本创建者工厂 所有Comment类共用**/
+		protected static var tfFactory:GeneralFactory = new GeneralFactory(TextField,20,20);
+		/** 表情创建者工厂 所有Comment类共用**/
+		protected static var emFactory:GeneralFactory = new GeneralFactory(GIFPlayer,20,20);
+		/** 完成地调用的函数,无参数 **/
         /** 完成地调用的函数,无参数 **/
         protected var _complete:Function;
         /** 配置数据 **/
         protected var item:Object;
         /** 空间分配索引,记录所占用的弹幕空间层 **/
         protected var _index:int;
-        /** 底部位置,为减少计算 **/
-        protected var _bottom:int;
+        /** 宽 **/
+		protected var _width:Number;
+		/** 高 **/
+		protected var _height:Number;
         /** 时计 **/
         protected var _tm:Timer;
-		/** 文本 **/
-		protected var _textfield:TextField;
-		/** 表情 **/
-		protected var _emoticon:GIFPlayer;
+		/** 文本样式 **/
+		protected var _textFormat:TextFormat;
+		/** 文本边框 **/
+		protected var _border:Shape;
         /** 配置 **/
         protected var config:CommentConfig;
         /**
@@ -43,14 +53,10 @@ package org.lala.comments
         public function Comment() 
         {
 			config = CommentConfig.getInstance();
-			_textfield = new TextField();
-			_textfield.autoSize = TextFieldAutoSize.LEFT;
-			_textfield.selectable = false;
-			_textfield.borderColor = 0x66FFFF;
-            _textfield.filters = config.filter;
-			_emoticon = new GIFPlayer();
-			addChild(_textfield);
-			addChild(_emoticon);
+			_textFormat = new TextFormat(config.font, null, null, config.bold);
+			_border = new Shape();
+			_border.visible = false;
+			addChild(_border);
         }
 		
         /**
@@ -60,7 +66,6 @@ package org.lala.comments
         {
             this.y = trans(py,this);
             this._index = idx;
-            this._bottom = py + this.height;
         }
 		/** 
         * 弹幕数据
@@ -81,19 +86,28 @@ package org.lala.comments
         {
             return this._index;
         }
+		override public function get width():Number 
+		{
+			return this._width;
+		}
+		
+		override public function get height():Number 
+		{
+			return this._height;
+		}
         /**
         * 底部位置,在空间检验时用到
         **/
         public function get bottom():int
         {
-            return this._bottom;
+            return this.y + this._height;
         }
         /**
         * 右边位置
         **/
         public function get right():int
         {
-            return this.x + this.width;
+            return this.x + this._width;
         }
         /**
         * 开始时间
@@ -107,14 +121,78 @@ package org.lala.comments
          */
         protected function init():void
         {
-            _textfield.defaultTextFormat = new TextFormat(config.font, config.sizee * item.size, item.color, config.bold);
-            _textfield.alpha = config.alpha;
-            _textfield.text = item.text;
-            _textfield.border = item.border;
-			var emo:EmoticonProvider = EmoticonProvider.getInstance();
-			_emoticon.load(emo.getEmoticon(emo.gifData[Math.floor(Math.random()*emo.gifData.length)].name));
-			_emoticon.x = _textfield.x + _textfield.width;
+			if (this.item) {
+				this._width = 0;
+				this._height = 0;
+				this._textFormat.size = config.sizee * this.item.size;
+				this._textFormat.color = this.item.color;
+				this._textFormat.bold = config.bold;
+				var emop:EmoticonProvider = EmoticonProvider.getInstance();
+				CONFIG::debug {
+					var text:String = this.item.text;
+					var randomEmoNum:int = Math.floor(Math.random() * 5);
+					var randomEmo:Object;
+					for (var j:int = 0, index:int = 0; j < randomEmoNum; j++ ) {
+						index = Math.floor(Math.random() * text.length);
+						randomEmo = emop.gifData[Math.floor(Math.random() * emop.gifData.length)];
+						text = text.replace(text.charAt(index), randomEmo.name);
+					}
+					this.item.text = text;
+				}
+				var content:String;
+				if (this.item.border) {
+					content = "【我】: " + this.item.text;
+				} else {
+					content = this.item.text;
+				}
+				var items:Array = this.analyseText(content);
+				var emo:Object, item:Object;
+				for (var i:int = 0; i < items.length; i++ ) {
+					emo = emop.getEmoticon(items[i]);
+					if (emo) {
+						item = emFactory.getObject();
+						(item as GIFPlayer).load(emo);
+					}else {
+						item = tfFactory.getObject();
+						(item as TextField).autoSize = TextFieldAutoSize.LEFT;
+						(item as TextField).selectable = false;
+						(item as TextField).filters = config.filter;
+						(item as TextField).alpha = config.alpha;
+						(item as TextField).text = items[i];
+						(item as TextField).setTextFormat(_textFormat);
+					}
+					addChildAt(item as DisplayObject, 0);
+					item.x = this._width;
+					this._width += (item as DisplayObject).width+1;
+					this._height = Math.max(this._height, (item as DisplayObject).height);
+				}
+				if (this.item.border) {
+					_border.graphics.clear();
+					_border.graphics.lineStyle(1, 0x66FFFF);
+					_border.graphics.drawRect(0, 0, this._width, this._height);
+					_border.graphics.endFill();
+					_border.visible = true;
+				}else {
+					_border.visible = false;
+				}
+			}
         }
+		/** 分析图文 */
+		protected function analyseText(text:String):Array {
+			var emoRegExp:RegExp = /(\[(?:[^\x00-\xff]|[a-zA-Z]){2}\])/g;//匹配仅包含两个中文或英文的字符
+			var aResult:Array = [];
+			var lastStart:int = 0;
+			for (var result:Object = emoRegExp.exec(text); result; result = emoRegExp.exec(text)) {
+				if (result.index > 0 && lastStart != result.index) {
+					aResult.push(text.substring(lastStart, result.index));
+				}
+				aResult.push(result[1]);
+				lastStart = emoRegExp.lastIndex;
+			}
+			if(lastStart != text.length)
+				aResult.push(text.substring(lastStart));
+			return aResult;
+		}
         /**
          * 恢复播放
          */
@@ -153,11 +231,19 @@ package org.lala.comments
         {
             this._complete = foo;
         }
-		
+		/** 停止播放 */
 		public function stop():void {
 			this._tm.stop();
 			this.completeHandler(null);
 		}
 		
+		/** 清除 */
+		public function clear():void {
+			var item:Object;
+			while (this.numChildren > 1) {
+				item = this.removeChildAt(0);
+				item is GIFPlayer ? emFactory.putObject(item) : tfFactory.putObject(item);//回收元件
+			}
+		}
     }
 }

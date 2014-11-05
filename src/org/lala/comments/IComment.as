@@ -9,6 +9,7 @@ package org.lala.comments
       function pause():void;
       function resume():void;
 	  function stop():void;
+	  function clear():void;
       function set complete(foo:Function):void;
     }
 }

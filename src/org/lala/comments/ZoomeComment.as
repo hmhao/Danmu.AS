@@ -399,6 +399,10 @@ package org.lala.comments
 			this.tw.stop();
 			this.completeHandler(null);
 		}
+		
+		/** 清除 */
+		public function clear():void {
+		}
 	}
 
 }

@@ -101,5 +101,9 @@ package org.lala.comments
 			this._tw.stop();
 			this.completeHandler(null);
 		}
+		
+		/** 清除 */
+		public function clear():void {
+		}
     }
 }
