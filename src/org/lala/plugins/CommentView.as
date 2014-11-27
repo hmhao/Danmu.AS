@@ -48,7 +48,7 @@ package org.lala.plugins {
 			this.mouseEnabled = this.mouseChildren = false;
 			_clip = new CommentClip();
 			_clip.name = 'commentviewlayer';
-			_clip.mouseEnabled = _clip.mouseChildren = false;
+			_clip.mouseEnabled = false;
 			_input = new CommentInput();
 			_input.name = 'commentinput';
 			managers = new Vector.<CommentManager>();
@@ -121,7 +121,7 @@ package org.lala.plugins {
 		 * 播放时间事件
 		 **/
 		private function timeHandler(event:TimerEvent):void {
-			if (cmtConfig.visible == false) {
+			if (cmtConfig.visible == false || !_isPlaying) {
 				return;
 			}
 			_stime = _timer.currentCount;

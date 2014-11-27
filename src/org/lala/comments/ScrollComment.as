@@ -27,8 +27,9 @@ package org.lala.comments
         override public function start():void
         {
             _tw = new Tween(this,'x',None.easeOut,x,-width,_dur,true);
-            _tw.addEventListener(TweenEvent.MOTION_FINISH,completeHandler);
-            _tw.resume();
+            _tw.addEventListener(TweenEvent.MOTION_FINISH, completeHandler);
+			_isPausing && _tw.stop();
+            //_tw.resume();
         }
         /**
          * 结束事件监听
@@ -44,19 +45,22 @@ package org.lala.comments
          */
         override public function resume():void
         {
-            _tw.resume();
+            _tw && _tw.resume();
+			_isPausing = false;
         }
         /**
          * 暂停
          */
         override public function pause():void
         {
-            _tw.stop();
+            _tw && _tw.stop();
+			_isPausing = true;
         }
 		
 		override public function stop():void 
 		{
-			this._tw.stop();
+			_tw && this._tw.stop();
+			_isPausing = false;
 			this.completeHandler(null);
 		}
     }

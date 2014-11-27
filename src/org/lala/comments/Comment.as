@@ -46,6 +46,7 @@ package org.lala.comments
 		protected var _border:Shape;
         /** 配置 **/
         protected var config:CommentConfig;
+		protected var _isPausing:Boolean;
         /**
          * 构造方法
          * @param	data 弹幕数据信息
@@ -123,7 +124,7 @@ package org.lala.comments
         {
 			if (this.item) {
 				this._width = 0;
-				this._height = 0;
+				this._height = 34;
 				this._textFormat.size = config.sizee * this.item.size;
 				this._textFormat.color = this.item.color;
 				this._textFormat.bold = config.bold;
@@ -164,7 +165,7 @@ package org.lala.comments
 					addChildAt(item as DisplayObject, 0);
 					item.x = this._width;
 					this._width += (item as DisplayObject).width+1;
-					this._height = Math.max(this._height, (item as DisplayObject).height);
+					//this._height = Math.max(this._height, (item as DisplayObject).height);
 				}
 				if (this.item.border) {
 					_border.graphics.clear();
@@ -199,6 +200,7 @@ package org.lala.comments
         public function resume():void
         {
             this._tm.start();
+			_isPausing = false;
         }
         /**
          * 暂停
@@ -206,6 +208,7 @@ package org.lala.comments
         public function pause():void
         {
             this._tm.stop();
+			_isPausing = true;
         }
         /**
          * 开始播放
@@ -214,7 +217,7 @@ package org.lala.comments
         {
             this._tm = new Timer(250,10);
             this._tm.addEventListener(TimerEvent.TIMER_COMPLETE,completeHandler);
-            this._tm.start();
+            !_isPausing && this._tm.start();
         }
         /**
         * 时计结束事件监听
@@ -234,6 +237,7 @@ package org.lala.comments
 		/** 停止播放 */
 		public function stop():void {
 			this._tm.stop();
+			_isPausing = false;
 			this.completeHandler(null);
 		}
 		
