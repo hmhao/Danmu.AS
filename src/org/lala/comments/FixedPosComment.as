@@ -105,5 +105,7 @@ package org.lala.comments
 		/** 清除 */
 		public function clear():void {
 		}
+		public function vote():void {
+		}
     }
 }

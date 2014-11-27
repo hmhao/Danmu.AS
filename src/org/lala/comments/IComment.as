@@ -10,6 +10,7 @@ package org.lala.comments
       function resume():void;
 	  function stop():void;
 	  function clear():void;
+	  function vote():void;
       function set complete(foo:Function):void;
     }
 }

@@ -17,6 +17,7 @@ package org.lala.plugins
 		/** 往舞台添加可视的评论实例 **/
 		public function add(comment:IComment):void {
 			var cmt:DisplayObject = comment as DisplayObject;
+			cmt.addEventListener(MouseEvent.CLICK, vote);
 			cmt.addEventListener(MouseEvent.ROLL_OVER, pauseLine);
 			cmt.addEventListener(MouseEvent.ROLL_OUT, resumeLine);
 			var index:int = Math.round(cmt.y / cmt.height);
@@ -30,6 +31,7 @@ package org.lala.plugins
 		/** 移除舞台上可视的评论实例 **/
 		public function remove(comment:IComment):void {
 			var cmt:DisplayObject = comment as DisplayObject;
+			cmt.removeEventListener(MouseEvent.CLICK, vote);
 			cmt.removeEventListener(MouseEvent.ROLL_OVER, pauseLine);
 			cmt.removeEventListener(MouseEvent.ROLL_OUT, resumeLine);
 			var index:int = Math.round(cmt.y / cmt.height);
@@ -63,7 +65,10 @@ package org.lala.plugins
 			}
 			_isPausing = false;
 		}
-		
+		private function vote(evt:MouseEvent):void {
+			var cmt:IComment = evt.currentTarget as IComment;
+			cmt.vote();
+		}
 		private function pauseLine(evt:MouseEvent):void {
 			if (_isPausing) return;
 			var cmt:DisplayObject = evt.currentTarget as DisplayObject;

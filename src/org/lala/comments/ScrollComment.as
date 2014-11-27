@@ -37,6 +37,7 @@ package org.lala.comments
         protected function completeHandler(event:TweenEvent):void
         {
             _complete();
+			_tw.removeEventListener(TweenEvent.MOTION_FINISH, completeHandler);
             _tw = null;
             delete this;
         }

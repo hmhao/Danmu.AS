@@ -44,6 +44,8 @@ package org.lala.comments
 		protected var _textFormat:TextFormat;
 		/** 文本边框 **/
 		protected var _border:Shape;
+		/** 文本边框 **/
+		protected var _agree:Agree;
         /** 配置 **/
         protected var config:CommentConfig;
 		protected var _isPausing:Boolean;
@@ -58,6 +60,10 @@ package org.lala.comments
 			_border = new Shape();
 			_border.visible = false;
 			addChild(_border);
+			_agree = new Agree();
+			addChild(_agree);
+			this.mouseChildren = false;
+			this.buttonMode = true;
         }
 		
         /**
@@ -167,6 +173,10 @@ package org.lala.comments
 					this._width += (item as DisplayObject).width+1;
 					//this._height = Math.max(this._height, (item as DisplayObject).height);
 				}
+				_agree.num = Math.floor(Math.random() * 20);
+				_agree.color = this.item.color;
+				_agree.x = this._width;
+				this._width += _agree.width+1;
 				if (this.item.border) {
 					_border.graphics.clear();
 					_border.graphics.lineStyle(1, 0x66FFFF);
@@ -244,10 +254,14 @@ package org.lala.comments
 		/** 清除 */
 		public function clear():void {
 			var item:Object;
-			while (this.numChildren > 1) {
+			while (this.numChildren > 2) {
 				item = this.removeChildAt(0);
 				item is GIFPlayer ? emFactory.putObject(item) : tfFactory.putObject(item);//回收元件
 			}
+		}
+		
+		public function vote():void {
+			_agree.vote();
 		}
     }
 }
